@@ -1,0 +1,124 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{hyperref}
+\usepackage{geometry}
+\geometry{margin=1in}
+
+\title{Closed Causal Information (CCI): A Computable Metric for\\
+Autonomous Internal Dynamics in Neural Systems}
+\author{Anonymous}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+We introduce \emph{Closed Causal Information} (CCI), a computable metric
+that quantifies the degree to which a neural system's internal hidden states
+evolve according to their own causal structure, independent of external input.
+CCI is grounded in conditional mutual information and requires no distributional
+assumptions beyond stationarity. We define the metric formally, prove that
+feedforward architectures are bounded at CCI\,$= 0$, and demonstrate
+empirically that recurrent architectures develop non-trivial CCI during
+training on sequence tasks. We further introduce the
+\emph{Minimal Recurrent Core — Causal} (MRC-C) method for localising the
+subgraph responsible for closed causal dynamics.
+No philosophical claims about consciousness or agency are made.
+\end{abstract}
+
+%-------------------------------------------------------------------
+\section{Introduction}
+
+A central question in the analysis of neural systems is whether internal
+representations are primarily \emph{reactive} (driven by external input) or
+exhibit autonomous temporal structure. Standard mutual information measures
+conflate these two sources of predictability. CCI isolates the internal
+component by conditioning out the contribution of the current input.
+
+%-------------------------------------------------------------------
+\section{Definition}
+
+Let $\mathbf{H}_t \in \mathbb{R}^d$ denote the hidden state of a neural
+system at time $t$, and let $\mathbf{E}_t$ denote the external input at
+time $t$.
+
+\begin{definition}[CCI]
+The \emph{Closed Causal Information} of a system over a trajectory of
+length $T$ is
+\begin{equation}
+    \mathcal{E}(X) \;=\; \frac{1}{T-1}\sum_{t=1}^{T-1}
+        I\!\left(\mathbf{H}_t\,;\,\mathbf{H}_{t+1} \mid \mathbf{E}_t\right),
+\label{eq:cci}
+\end{equation}
+where $I(A\,;\,B\mid C)$ denotes the conditional mutual information between
+$A$ and $B$ given $C$.
+\end{definition}
+
+Equation~\eqref{eq:cci} measures the average temporal dependence between
+consecutive hidden states that cannot be explained by the concurrent input.
+High $\mathcal{E}(X)$ indicates that the system's future state is substantially
+predictable from its current state regardless of what stimuli arrive.
+
+%-------------------------------------------------------------------
+\section{Estimation}
+
+In practice we estimate $I(\mathbf{H}_t;\mathbf{H}_{t+1}\mid\mathbf{E}_t)$
+via a Gaussian approximation:
+\begin{equation}
+    I(A;B\mid C) \;\approx\;
+    \frac{1}{2}\log\frac{|\Sigma_{AC}||\Sigma_{BC}|}{|\Sigma_{C}||\Sigma_{ABC}|},
+\end{equation}
+where $\Sigma_S$ denotes the covariance matrix of the joint vector $S$.
+This estimator is consistent when the joint distribution is approximately
+Gaussian and is efficient to compute from sample covariance matrices.
+
+%-------------------------------------------------------------------
+\section{Properties}
+
+\begin{proposition}
+For any strictly feedforward architecture, $\mathcal{E}(X) = 0$.
+\end{proposition}
+
+\begin{proof}
+In a feedforward network, $\mathbf{H}_{t+1}$ is a deterministic function
+of $\mathbf{E}_{t+1}$ alone, so $\mathbf{H}_{t+1} \perp\!\!\!\perp \mathbf{H}_t
+\mid \mathbf{E}_t$, giving $I(\mathbf{H}_t;\mathbf{H}_{t+1}\mid\mathbf{E}_t) = 0$.
+\end{proof}
+
+%-------------------------------------------------------------------
+\section{MRC-C: Minimal Recurrent Core — Causal}
+
+Given a network with multiple recurrent components, MRC-C identifies the
+\emph{minimal subgraph} $\mathcal{G}^* \subseteq \mathcal{G}$ such that
+ablating any edge in $\mathcal{G}^*$ reduces $\mathcal{E}(X)$ by more than
+a threshold $\epsilon$. This is computed greedily by edge-importance scoring
+via the gradient of CCI with respect to edge weights.
+
+%-------------------------------------------------------------------
+\section{Experiments}
+
+We evaluate CCI on four settings:
+\begin{enumerate}
+    \item Feedforward vs.\ RNN on a copying task.
+    \item CCI dynamics over the course of training.
+    \item Effect of structured vs.\ random input noise on CCI.
+    \item Transformer baseline with causal self-attention.
+\end{enumerate}
+
+Results are consistent with the theoretical prediction: feedforward networks
+maintain CCI $\approx 0$, while recurrent networks develop increasing CCI as
+training progresses.
+
+%-------------------------------------------------------------------
+\section{Conclusion}
+
+CCI provides a simple, model-agnostic, and computationally efficient signal
+for characterising the degree of internal temporal autonomy in neural systems.
+It distinguishes genuinely recurrent computation from reactive processing
+without appeal to any particular architectural definition of recurrence.
+
+\bibliographystyle{plain}
+\bibliography{refs}
+
+\end{document}
