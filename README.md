@@ -88,6 +88,7 @@ The implementation uses covariance factorization with Cholesky stabilization.
 - Seeds + per-run in `results/cci_values.json`.
 - Cholesky + adaptive jitter (`1e-7..1e-4`).
 - `pytest` sanity + shape checks.
+- Interpretation boundaries and non-claims are governed by `CLAIMS.md`.
 
 ## What CCI Captures
 
@@ -103,6 +104,8 @@ The implementation uses covariance factorization with Cholesky stabilization.
 - External validation datasets.
 
 Open an issue with a reproducible benchmark proposal.
+
+See `docs/applications.md` for evidence-tiered application scope.
 
 ## Non-Claims (Important)
 

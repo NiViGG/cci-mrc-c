@@ -37,3 +37,5 @@ into a project-aligned outline.
   assumptions (`theory/assumptions.md`).
 - Any broader claims (clinical, legal, consciousness-related) remain future
   hypotheses pending external validation programs.
+- Collaboration on interpretive extensions should pair each proposal with a
+  reproducible benchmark plan and explicit non-claim boundaries (`CLAIMS.md`).
