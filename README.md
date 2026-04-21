@@ -38,6 +38,21 @@ _Conceptual interpretation only. Metric claims are defined in `CLAIMS.md`._
 The concise vision synthesis from the external blueprint is documented in
 `theory/master_blueprint.md` and explicitly tagged as Interpretive Layer (Vision).
 
+## Visual Pipeline Panels
+
+![CCI Hero Collage](assets/cci_hero_collage.png)
+
+Panel breakdown:
+
+![Dynamic System Panel](assets/cci_panel_system.png)
+
+![CCI Measurement Panel](assets/cci_panel_measurement.png)
+
+![MRC-C Benchmark Panel](assets/cci_panel_mrc_benchmark.png)
+
+Visuals are explanatory overlays for communication and do not replace metric
+evidence in `results/` and claim boundaries in `CLAIMS.md`.
+
 ## Conceptual Protocols (Attributed)
 
 - `protocols/public_v1.md`
@@ -149,6 +164,8 @@ Documentation updates should preserve boundaries defined in `CLAIMS.md`.
 - Training dynamics tracking
 - Input invariance test (noise vs structured)
 - Transformer baseline evaluation
+
+Comparative benchmark reporting uses bias-corrected CCI as primary value.
 
 ## Note on thresholds
 
