@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 
 from experiments.exp_ff_vs_rnn import run as run_ff_vs_rnn
@@ -14,6 +15,14 @@ def main():
     set_seed(42)
     Path("assets").mkdir(exist_ok=True)
     Path("results").mkdir(exist_ok=True)
+
+    smoke = os.getenv("CCI_SMOKE", "0") == "1"
+    if smoke:
+        run_ff_vs_rnn(seeds=[42], seq_len=128, n_perm=5)
+        run_noise_vs_structure(seq_len=128, n_perm=5)
+        run_transformer_baseline(seq_len=128, n_perm=5)
+        print("Smoke run complete. Core results written to results/.")
+        return
 
     run_ff_vs_rnn()
     run_noise_vs_structure()

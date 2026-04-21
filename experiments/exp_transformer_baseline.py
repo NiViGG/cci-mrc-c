@@ -6,10 +6,10 @@ from metrics.cci import CCIEstimator
 from models.transformer import SimpleTransformer
 
 
-def run():
+def run(seq_len: int = 1000, n_perm: int = 20):
     seed = 42
     torch.manual_seed(seed)
-    env = torch.randn(1, 1000, 5)
+    env = torch.randn(1, seq_len, 5)
     model = SimpleTransformer(env_dim=5, hidden_dim=64, heads=4)
     h, _ = model(env)
     h = h.squeeze(0)
@@ -24,7 +24,7 @@ def run():
     g = torch.Generator()
     g.manual_seed(seed + 30_000)
     null_vals = []
-    for _ in range(20):
+    for _ in range(n_perm):
         idx = torch.randperm(h_t1.size(0), generator=g)
         null_vals.append(cci.compute(h_t, h_t1[idx], e_t))
     null_mean = float(sum(null_vals) / len(null_vals))
@@ -36,7 +36,7 @@ def run():
         "method": {
             "primary_value": "bias_corrected",
             "correction": "raw_cmi - permutation_null_mean (floored at 0)",
-            "n_permutations": 20,
+            "n_permutations": n_perm,
         },
         "raw": float(raw),
         "null_mean": null_mean,

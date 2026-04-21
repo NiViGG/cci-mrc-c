@@ -1,6 +1,8 @@
 # CCI-MRC-C
 ## Computable Research Pipeline for Closed Causal Information in Neural Dynamical Systems
 
+[![CI](https://github.com/NiViGG/cci-mrc-c/actions/workflows/ci.yml/badge.svg)](https://github.com/NiViGG/cci-mrc-c/actions/workflows/ci.yml)
+
 **Closed Causal Information (CCI)** is a diagnostic metric for internal temporal
 dependence in sequential systems.
 

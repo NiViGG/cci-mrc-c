@@ -6,7 +6,7 @@ from metrics.cci import CCIEstimator
 from models.mrc_lstm import MRCLSTM
 
 
-def _cci_on_env(env: torch.Tensor, seed: int) -> dict:
+def _cci_on_env(env: torch.Tensor, seed: int, n_perm: int = 20) -> dict:
     model = MRCLSTM(env_dim=env.size(1), hidden_dim=64)
     h = torch.zeros(1, 64)
     c = torch.zeros(1, 64)
@@ -26,7 +26,7 @@ def _cci_on_env(env: torch.Tensor, seed: int) -> dict:
     g = torch.Generator()
     g.manual_seed(seed + 20_000)
     null_vals = []
-    for _ in range(20):
+    for _ in range(n_perm):
         idx = torch.randperm(h_t1.size(0), generator=g)
         null_vals.append(cci.compute(h_t, h_t1[idx], e_t))
     null_mean = float(sum(null_vals) / len(null_vals))
@@ -39,21 +39,21 @@ def _cci_on_env(env: torch.Tensor, seed: int) -> dict:
     }
 
 
-def run():
+def run(seq_len: int = 1000, n_perm: int = 20):
     seed = 42
     torch.manual_seed(seed)
-    noise_env = torch.randn(1000, 5)
-    structured_env = torch.sin(torch.linspace(0, 40, 1000)).unsqueeze(1).repeat(1, 5)
+    noise_env = torch.randn(seq_len, 5)
+    structured_env = torch.sin(torch.linspace(0, 40, seq_len)).unsqueeze(1).repeat(1, 5)
 
-    cci_noise = _cci_on_env(noise_env, seed)
-    cci_struct = _cci_on_env(structured_env, seed)
+    cci_noise = _cci_on_env(noise_env, seed, n_perm=n_perm)
+    cci_struct = _cci_on_env(structured_env, seed, n_perm=n_perm)
     result = {
         "experiment": "noise_vs_structured",
         "seed": seed,
         "method": {
             "primary_value": "bias_corrected",
             "correction": "raw_cmi - permutation_null_mean (floored at 0)",
-            "n_permutations": 20,
+            "n_permutations": n_perm,
         },
         "noise_input": cci_noise,
         "structured_input": cci_struct,

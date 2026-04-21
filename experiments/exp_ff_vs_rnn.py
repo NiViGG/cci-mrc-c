@@ -40,17 +40,21 @@ def _estimate_with_bias_control(
     }
 
 
-def _run_feedforward(env: torch.Tensor, seed: int, hidden_dim: int = 64) -> dict:
+def _run_feedforward(
+    env: torch.Tensor, seed: int, hidden_dim: int = 64, n_perm: int = 20
+) -> dict:
     model = FeedForwardBaseline(env_dim=env.size(1), hidden_dim=hidden_dim)
     states = []
     for t in range(env.size(0) - 1):
         h_t, _ = model(env[t].unsqueeze(0))
         states.append(h_t.detach())
     h = torch.cat(states, dim=0)
-    return _estimate_with_bias_control(h[:-1], h[1:], env[:-2], seed=seed)
+    return _estimate_with_bias_control(h[:-1], h[1:], env[:-2], seed=seed, n_perm=n_perm)
 
 
-def _run_recurrent(env: torch.Tensor, seed: int, hidden_dim: int = 64) -> dict:
+def _run_recurrent(
+    env: torch.Tensor, seed: int, hidden_dim: int = 64, n_perm: int = 20
+) -> dict:
     model = MRCCore(env_dim=env.size(1), hidden_dim=hidden_dim)
     opt = torch.optim.Adam(model.parameters(), lr=0.005)
     h_t, c_t = model.init_state(batch_size=1, device=env.device)
@@ -66,10 +70,12 @@ def _run_recurrent(env: torch.Tensor, seed: int, hidden_dim: int = 64) -> dict:
         states.append(h_next.detach())
         h_t, c_t = h_next.detach(), c_next.detach()
     h = torch.cat(states, dim=0)
-    return _estimate_with_bias_control(h[:-1], h[1:], env[:-2], seed=seed)
+    return _estimate_with_bias_control(h[:-1], h[1:], env[:-2], seed=seed, n_perm=n_perm)
 
 
-def run(seeds: list[int] | None = None, seq_len: int = 700, env_dim: int = 5) -> dict:
+def run(
+    seeds: list[int] | None = None, seq_len: int = 700, env_dim: int = 5, n_perm: int = 20
+) -> dict:
     seeds = seeds or [42, 43, 44, 45, 46]
     ff_runs = []
     rnn_runs = []
@@ -78,8 +84,8 @@ def run(seeds: list[int] | None = None, seq_len: int = 700, env_dim: int = 5) ->
         torch.manual_seed(seed)
         np.random.seed(seed)
         env = torch.randn(seq_len, env_dim)
-        ff_runs.append(_run_feedforward(env, seed=seed))
-        rnn_runs.append(_run_recurrent(env, seed=seed))
+        ff_runs.append(_run_feedforward(env, seed=seed, n_perm=n_perm))
+        rnn_runs.append(_run_recurrent(env, seed=seed, n_perm=n_perm))
 
     ff_corrected = [r["bias_corrected"] for r in ff_runs]
     rnn_corrected = [r["bias_corrected"] for r in rnn_runs]
@@ -93,7 +99,7 @@ def run(seeds: list[int] | None = None, seq_len: int = 700, env_dim: int = 5) ->
         "method": {
             "primary_value": "bias_corrected",
             "correction": "raw_cmi - permutation_null_mean (floored at 0)",
-            "n_permutations": 20,
+            "n_permutations": n_perm,
         },
         "results": {
             "feedforward_baseline": {
