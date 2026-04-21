@@ -74,17 +74,41 @@ The implementation uses covariance factorization with Cholesky stabilization.
 - Transformer non-zero CCI is conditional dependence evidence only and not proof
   of autonomy.
 
+## Why Frontier Labs May Care
+
+- Hidden-state diagnostics beyond outputs.
+- Regime-shift monitoring (rolling CCI / delta-CCI).
+- Architecture-level comparison (bias-corrected CCI).
+- Safety-relevant exploratory signal (latent loop persistence).
+
+## Reproducibility Card
+
+- Primary metric: `bias_corrected = max(raw_cmi - permutation_null_mean, 0)`.
+- Raw retained for diagnostics.
+- Seeds + per-run in `results/cci_values.json`.
+- Cholesky + adaptive jitter (`1e-7..1e-4`).
+- `pytest` sanity + shape checks.
+
 ## What CCI Captures
 
 - Internal temporal dependence
 - Hidden-state persistence
 - Regime shifts in latent dynamics (via CCI trend / delta-CCI)
 
-## What CCI Does Not Claim
+## Open Collaboration Requests
 
-- Not a causal proof
-- Not a consciousness detector
-- Not a legal/personhood criterion
+- Non-Gaussian CMI estimators.
+- Cross-model benchmark suite.
+- Online regime monitoring.
+- External validation datasets.
+
+Open an issue with a reproducible benchmark proposal.
+
+## Non-Claims (Important)
+
+- No causal proof.
+- No consciousness detection claim.
+- `1.0 bit` is operational in this setup only, not universal.
 
 ## Applications
 
