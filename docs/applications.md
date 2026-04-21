@@ -3,6 +3,7 @@
 All application statements in this document are constrained by `CLAIMS.md`.
 CCI is a diagnostic dependence metric and not a causal proof.
 Primary benchmarking in this repository uses bias-corrected CCI (see `README.md`).
+Use reproducible scripts and fixed seeds when proposing benchmark extensions.
 
 ## Near-term plausible (now/soon)
 

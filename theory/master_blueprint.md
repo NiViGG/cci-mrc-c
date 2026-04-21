@@ -39,3 +39,4 @@ into a project-aligned outline.
   hypotheses pending external validation programs.
 - Collaboration on interpretive extensions should pair each proposal with a
   reproducible benchmark plan and explicit non-claim boundaries (`CLAIMS.md`).
+- Cross-reference `README.md` and `docs/applications.md` for current evidence tiers.

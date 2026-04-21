@@ -106,6 +106,7 @@ The implementation uses covariance factorization with Cholesky stabilization.
 Open an issue with a reproducible benchmark proposal.
 
 See `docs/applications.md` for evidence-tiered application scope.
+Documentation updates should preserve boundaries defined in `CLAIMS.md`.
 
 ## Non-Claims (Important)
 
