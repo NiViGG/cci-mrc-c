@@ -55,17 +55,6 @@ Panel breakdown:
 Visuals are explanatory overlays for communication and do not replace metric
 evidence in `results/` and claim boundaries in `CLAIMS.md`.
 
-## Conceptual Protocols (Attributed)
-
-- `protocols/public_v1.md`
-- `protocols/transparent_v1.md`
-- `protocols/diffused_v1.md`
-- `protocols/trap_v1.md`
-- Attribution and source mapping: `protocols/ATTRIBUTION.md`
-- Validation note: `docs/datsyuk_protocols_validation.md`
-
-These protocols are interpretive references and do not replace metric evidence.
-
 ## Interactive CCI Calculator (Experimental)
 
 The repository includes an experimental CCI calculator workflow (Gaussian CMI):
