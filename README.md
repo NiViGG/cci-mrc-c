@@ -170,6 +170,39 @@ Documentation updates should preserve boundaries defined in `CLAIMS.md`.
 
 Comparative benchmark reporting uses bias-corrected CCI as primary value.
 
+## EEG Experimental Extension
+
+This repository now includes an EEG-oriented experimental pipeline as an
+extension layer on top of the current CCI benchmark core.
+
+## New Modules
+
+- `app.py`
+- `core/models.py`
+- `core/engine.py`
+- `data/sample_eeg.py`
+- `research/cci_validation.py`
+
+## How to Run EEG Demo
+
+```bash
+pip install -r requirements.txt
+streamlit run app.py
+```
+
+## EEG Validation Script
+
+```bash
+python research/cci_validation.py
+```
+
+This writes an exploratory JSON summary to `results/eeg_validation.json`.
+
+## Scientific Scope Note
+
+This EEG extension is exploratory and provides a diagnostic dependence signal.
+It does not constitute proof of consciousness or causal agency.
+
 ## Note on thresholds
 
 `1.0 bit` is an operational threshold in this setup. It is not a universal
