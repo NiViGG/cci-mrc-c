@@ -3,7 +3,3 @@ __pycache__/
 .env
 .vscode/
 .idea/
-*.png
-*.gif
-results/
-assets/

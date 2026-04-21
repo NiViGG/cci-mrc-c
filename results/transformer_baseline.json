@@ -1,0 +1,9 @@
+{
+  "experiment": "transformer_baseline",
+  "seed": 42,
+  "result": {
+    "cci": 1.243638038635254,
+    "jitter": 1e-07
+  },
+  "unit": "bits (shannon)"
+}

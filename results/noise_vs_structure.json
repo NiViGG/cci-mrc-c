@@ -1,0 +1,14 @@
+{
+  "experiment": "noise_vs_structure",
+  "results": {
+    "noise_input": {
+      "cci": 31.46498680114746,
+      "jitter": 1e-07
+    },
+    "structured_input": {
+      "cci": 14.295650482177734,
+      "jitter": 1e-07
+    }
+  },
+  "unit": "bits (shannon)"
+}
