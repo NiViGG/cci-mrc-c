@@ -208,6 +208,12 @@ It does not constitute proof of consciousness or causal agency.
 `1.0 bit` is an operational threshold in this setup. It is not a universal
 constant and must be interpreted with assumptions from `CLAIMS.md`.
 
+## External Research Note
+
+- A concise application-oriented technical note is available at `paper/Paper.pdf`.
+- It presents CCI application domains in a diagnostic, input-conditioned, non-causal framing.
+- It is intended as a citation/readability anchor for reviewers.
+
 ## Quick Start
 
 ```bash
