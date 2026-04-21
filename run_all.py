@@ -1,18 +1,27 @@
 from pathlib import Path
 
-from experiments.run_ff_vs_rnn import run as run_baseline
-from experiments.training import run as run_training
-from utils.viz_vortex import plot_cci_and_delta, plot_phase_space
+from experiments.exp_ff_vs_rnn import run as run_ff_vs_rnn
+from experiments.exp_noise_vs_structure import run as run_noise_vs_structure
+from experiments.exp_transformer_baseline import run as run_transformer_baseline
+from experiments.exp_training_dynamics import run as run_training_dynamics
+from utils.make_gif import make_attractor_gif
+from utils.make_plots import run as run_plot_generation
+from utils.seed import set_seed
+from utils.viz import plot_phase_space
 
 
 def main():
+    set_seed(42)
     Path("assets").mkdir(exist_ok=True)
     Path("results").mkdir(exist_ok=True)
 
-    run_baseline()
-    cci_series, history_h = run_training()
-    plot_cci_and_delta(cci_series, "assets/cci_training.png", "assets/delta_cci.png")
-    plot_phase_space(history_h, "assets/phase_space.png")
+    run_ff_vs_rnn()
+    run_noise_vs_structure()
+    run_transformer_baseline()
+    training_out = run_training_dynamics()
+    projection = plot_phase_space(training_out["history_h"], "assets/phase_space.png")
+    make_attractor_gif(projection, out_path="assets/attractor.gif")
+    run_plot_generation()
     print("Done. Artifacts written to assets/ and results/.")
 
 
