@@ -2,9 +2,11 @@ import torch
 
 
 class CCIEstimator:
-    def __init__(self, jitter: float = 1e-6, max_jitter: float = 1e-4):
+    def __init__(self, jitter: float = 1e-7, max_jitter: float = 1e-4):
         self.jitter = jitter
         self.max_jitter = max_jitter
+        self.last_jitter: float | None = None
+        self.last_jitter_trace: list[float] = []
 
     @staticmethod
     def _as_2d(x: torch.Tensor) -> torch.Tensor:
@@ -32,6 +34,7 @@ class CCIEstimator:
                 reg_cov = cov + eye * jitter
                 chol = torch.linalg.cholesky(reg_cov)
                 logdet = 2.0 * torch.log(torch.diagonal(chol)).sum()
+                self.last_jitter = jitter
                 return logdet, jitter
             except RuntimeError:
                 jitter *= 10.0
@@ -44,12 +47,15 @@ class CCIEstimator:
     def _entropy(self, x: torch.Tensor) -> torch.Tensor:
         x = self._as_2d(x)
         cov = self._cov(x)
-        logdet, _ = self._logdet_cholesky_adaptive(cov)
+        logdet, used_jitter = self._logdet_cholesky_adaptive(cov)
+        self.last_jitter_trace.append(used_jitter)
         dim = cov.size(0)
         two_pi = torch.tensor(2.0 * torch.pi, device=cov.device, dtype=cov.dtype)
         return 0.5 * logdet + 0.5 * dim * (1.0 + torch.log(two_pi))
 
     def compute(self, h_t: torch.Tensor, h_t1: torch.Tensor, e_t: torch.Tensor) -> float:
+        self.last_jitter = None
+        self.last_jitter_trace = []
         h_t = self._as_2d(h_t)
         h_t1 = self._as_2d(h_t1)
         e_t = self._as_2d(e_t)
@@ -62,4 +68,6 @@ class CCIEstimator:
         xyz = torch.cat([h_t, h_t1, e_t], dim=1)
 
         cmi = self._entropy(xz) + self._entropy(yz) - self._entropy(xyz) - self._entropy(e_t)
+        if self.last_jitter_trace:
+            self.last_jitter = max(self.last_jitter_trace)
         return max(float(cmi.item()), 0.0)
