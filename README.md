@@ -4,9 +4,9 @@
 **Closed Causal Information (CCI)** is a diagnostic metric for internal temporal
 dependence in sequential systems.
 
-\[
+$$
 I(H_t; H_{t+1}\mid E_t)
-\]
+$$
 
 It measures how much future internal state depends on current internal state
 after conditioning on external input.
@@ -18,16 +18,16 @@ after conditioning on external input.
 We consider a system with internal state `H_t`, external input `E_t`, and
 stochastic noise `epsilon_t`:
 
-\[
+$$
 H_{t+1}=F(H_t,E_t,\epsilon_t)
-\]
+$$
 
 The core objective is to isolate the contribution of internal dynamics from
 input-driven effects.
 
-\[
+$$
 E(X)=\sum_{t=1}^{T} I(H_t;H_{t+1}\mid E_t)
-\]
+$$
 
 ## Conceptual Diagram (Vision Layer)
 
@@ -56,13 +56,13 @@ The repository includes an experimental CCI calculator workflow (Gaussian CMI):
 
 ## Gaussian Estimation
 
-\[
+$$
 H(X)=\frac{1}{2}\log\left((2\pi e)^d|\Sigma_X|\right)
-\]
+$$
 
-\[
+$$
 I(X;Y\mid Z)=\frac{1}{2}\log\frac{|\Sigma_{XZ}||\Sigma_{YZ}|}{|\Sigma_Z||\Sigma_{XYZ}|}
-\]
+$$
 
 The implementation uses covariance factorization with Cholesky stabilization.
 
