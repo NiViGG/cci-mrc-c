@@ -38,6 +38,16 @@ _Conceptual interpretation only. Metric claims are defined in `CLAIMS.md`._
 The concise vision synthesis from the external blueprint is documented in
 `theory/master_blueprint.md` and explicitly tagged as Interpretive Layer (Vision).
 
+## Conceptual Protocols (Attributed)
+
+- `protocols/public_v1.md`
+- `protocols/transparent_v1.md`
+- `protocols/diffused_v1.md`
+- `protocols/trap_v1.md`
+- Attribution and source mapping: `protocols/ATTRIBUTION.md`
+
+These protocols are interpretive references and do not replace metric evidence.
+
 ## Interactive CCI Calculator (Experimental)
 
 The repository includes an experimental CCI calculator workflow (Gaussian CMI):
