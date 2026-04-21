@@ -138,6 +138,15 @@ Open an issue with a reproducible benchmark proposal.
 See `docs/applications.md` for evidence-tiered application scope.
 Documentation updates should preserve boundaries defined in `CLAIMS.md`.
 
+## How to contribute benchmarks
+
+- Use issue templates in `.github/ISSUE_TEMPLATE/`:
+  - `benchmark_proposal.yml`
+  - `repro_mismatch.yml`
+  - `bug_report.yml`
+- Use `.github/pull_request_template.md` for PR checklist and reproducibility notes.
+- Compare against `results/reference_v0_1_1.json` when reporting mismatches.
+
 ## Non-Claims (Important)
 
 - No causal proof.

@@ -1,0 +1,34 @@
+name: Benchmark proposal
+description: Propose a reproducible benchmark extension.
+title: "[benchmark] "
+labels: ["benchmark"]
+body:
+  - type: textarea
+    id: objective
+    attributes:
+      label: Objective
+      description: What hypothesis or comparison does this benchmark test?
+    validations:
+      required: true
+  - type: textarea
+    id: protocol
+    attributes:
+      label: Reproducible protocol
+      description: Include seeds, data assumptions, commands, and expected artifacts.
+      placeholder: |
+        Seeds:
+        Command:
+        Expected results files:
+    validations:
+      required: true
+  - type: checkboxes
+    id: policy
+    attributes:
+      label: Claim-policy checklist
+      options:
+        - label: I use bias-corrected CCI for primary comparison.
+          required: true
+        - label: I avoid causal/consciousness overclaims.
+          required: true
+        - label: I include qualifiers per CLAIMS.md.
+          required: true

@@ -1,0 +1,31 @@
+name: Reproducibility mismatch
+description: Report mismatch against reference snapshot or expected outputs.
+title: "[repro] "
+labels: ["reproducibility"]
+body:
+  - type: input
+    id: reference
+    attributes:
+      label: Reference snapshot
+      description: e.g. results/reference_v0_1_1.json
+    validations:
+      required: true
+  - type: textarea
+    id: mismatch
+    attributes:
+      label: Mismatch details
+      description: Which values differ, and by how much?
+    validations:
+      required: true
+  - type: textarea
+    id: env
+    attributes:
+      label: Environment
+      description: Python version, OS, dependency versions.
+  - type: textarea
+    id: command
+    attributes:
+      label: Commands used
+      render: shell
+    validations:
+      required: true

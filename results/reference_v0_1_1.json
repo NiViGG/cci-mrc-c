@@ -1,0 +1,31 @@
+{
+  "snapshot_version": "v0.1.1",
+  "source_commit": "6a761fe",
+  "generated_at": "2026-04-21",
+  "generation_command": "python run_all.py",
+  "metric_policy": {
+    "primary_value": "bias_corrected",
+    "raw_retained_for_diagnostics": true,
+    "correction": "raw_cmi - permutation_null_mean (floored at 0)"
+  },
+  "seeds": [42, 43, 44, 45, 46],
+  "results": {
+    "feedforward_baseline": {
+      "raw_per_run": [3.224061965942383, 3.219834804534912, 3.3476815223693848, 3.2116684913635254, 3.2718496322631836],
+      "bias_corrected_per_run": [0.0, 0.0, 0.0919120788574217, 0.0, 0.0],
+      "raw_mean": 3.255019283294678,
+      "raw_std": 0.05088250269207483,
+      "bias_corrected_mean": 0.01838241577148434,
+      "bias_corrected_std": 0.03676483154296868
+    },
+    "mrc_c_core": {
+      "raw_per_run": [24.589479446411133, 25.190752029418945, 25.996713638305664, 25.889860153198242, 23.204727172851562],
+      "bias_corrected_per_run": [21.349981689453124, 21.937176990509034, 22.732216930389406, 22.624994945526122, 19.947686195373535],
+      "raw_mean": 24.974306488037108,
+      "raw_std": 1.020774840186951,
+      "bias_corrected_mean": 21.718411350250246,
+      "bias_corrected_std": 1.0167361470874048
+    }
+  },
+  "unit": "bits (shannon)"
+}

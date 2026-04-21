@@ -1,0 +1,33 @@
+name: Bug report
+description: Report an implementation or documentation defect.
+title: "[bug] "
+labels: ["bug"]
+body:
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: What is broken and what did you expect?
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Reproduction steps
+      description: Provide deterministic steps and commands.
+      placeholder: |
+        1. pip install -r requirements.txt
+        2. python run_all.py
+        3. ...
+    validations:
+      required: true
+  - type: input
+    id: commit
+    attributes:
+      label: Commit / branch
+      description: Commit hash or branch where issue was observed.
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs / traceback
+      render: shell
