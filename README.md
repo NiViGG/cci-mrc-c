@@ -66,6 +66,14 @@ I(X;Y\mid Z)=\frac{1}{2}\log\frac{|\Sigma_{XZ}||\Sigma_{YZ}|}{|\Sigma_Z||\Sigma_
 
 The implementation uses covariance factorization with Cholesky stabilization.
 
+## Benchmark Reporting Policy
+
+- Primary benchmark comparison uses `bias_corrected` CCI.
+- `raw` CCI is retained for diagnostics but can be inflated in high-dimensional
+  finite-sample settings.
+- Transformer non-zero CCI is conditional dependence evidence only and not proof
+  of autonomy.
+
 ## What CCI Captures
 
 - Internal temporal dependence

@@ -10,18 +10,47 @@ from models.baseline import FeedForwardBaseline
 from models.mrc_c import MRCCore
 
 
-def _run_feedforward(env: torch.Tensor, hidden_dim: int = 64) -> tuple[float, float | None]:
+def _estimate_with_bias_control(
+    h_t: torch.Tensor,
+    h_t1: torch.Tensor,
+    e_t: torch.Tensor,
+    seed: int,
+    n_perm: int = 20,
+) -> dict:
+    estimator = CCIEstimator()
+    raw = estimator.compute(h_t, h_t1, e_t)
+    used_jitter = estimator.last_jitter
+
+    g = torch.Generator()
+    g.manual_seed(seed + 10_000)
+    null_values = []
+    for _ in range(n_perm):
+        idx = torch.randperm(h_t1.size(0), generator=g)
+        null_values.append(estimator.compute(h_t, h_t1[idx], e_t))
+
+    null_mean = float(np.mean(null_values))
+    null_std = float(np.std(null_values))
+    corrected = max(raw - null_mean, 0.0)
+    return {
+        "raw": float(raw),
+        "null_mean": null_mean,
+        "null_std": null_std,
+        "bias_corrected": float(corrected),
+        "used_jitter": used_jitter,
+    }
+
+
+def _run_feedforward(env: torch.Tensor, seed: int, hidden_dim: int = 64) -> dict:
     model = FeedForwardBaseline(env_dim=env.size(1), hidden_dim=hidden_dim)
     states = []
     for t in range(env.size(0) - 1):
         h_t, _ = model(env[t].unsqueeze(0))
         states.append(h_t.detach())
     h = torch.cat(states, dim=0)
-    estimator = CCIEstimator()
-    return estimator.compute(h[:-1], h[1:], env[:-2]), estimator.last_jitter
+    return _estimate_with_bias_control(h[:-1], h[1:], env[:-2], seed=seed)
 
 
-def _run_recurrent(env: torch.Tensor, hidden_dim: int = 64) -> tuple[float, float | None]:
+def _run_recurrent(env: torch.Tensor, seed: int, hidden_dim: int = 64) -> dict:
     model = MRCCore(env_dim=env.size(1), hidden_dim=hidden_dim)
     opt = torch.optim.Adam(model.parameters(), lr=0.005)
     h_t, c_t = model.init_state(batch_size=1, device=env.device)
@@ -37,44 +66,49 @@ def _run_recurrent(env: torch.Tensor, hidden_dim: int = 64) -> tuple[float, floa
         states.append(h_next.detach())
         h_t, c_t = h_next.detach(), c_next.detach()
     h = torch.cat(states, dim=0)
-    estimator = CCIEstimator()
-    return estimator.compute(h[:-1], h[1:], env[:-2]), estimator.last_jitter
+    return _estimate_with_bias_control(h[:-1], h[1:], env[:-2], seed=seed)
 
 
 def run(seeds: list[int] | None = None, seq_len: int = 700, env_dim: int = 5) -> dict:
     seeds = seeds or [42, 43, 44, 45, 46]
-    ff_values = []
-    ff_jitters = []
-    rnn_values = []
-    rnn_jitters = []
+    ff_runs = []
+    rnn_runs = []
 
     for seed in seeds:
         torch.manual_seed(seed)
         np.random.seed(seed)
         env = torch.randn(seq_len, env_dim)
-        ff_val, ff_jitter = _run_feedforward(env)
-        rnn_val, rnn_jitter = _run_recurrent(env)
-        ff_values.append(float(ff_val))
-        ff_jitters.append(ff_jitter)
-        rnn_values.append(float(rnn_val))
-        rnn_jitters.append(rnn_jitter)
+        ff_runs.append(_run_feedforward(env, seed=seed))
+        rnn_runs.append(_run_recurrent(env, seed=seed))
+
+    ff_corrected = [r["bias_corrected"] for r in ff_runs]
+    rnn_corrected = [r["bias_corrected"] for r in rnn_runs]
+    ff_raw = [r["raw"] for r in ff_runs]
+    rnn_raw = [r["raw"] for r in rnn_runs]
 
     payload = {
         "experiment": "feedforward_vs_recurrent",
         "runs": len(seeds),
         "seeds": seeds,
+        "method": {
+            "primary_value": "bias_corrected",
+            "correction": "raw_cmi - permutation_null_mean (floored at 0)",
+            "n_permutations": 20,
+        },
         "results": {
             "feedforward_baseline": {
-                "per_run": ff_values,
-                "mean": float(np.mean(ff_values)),
-                "std": float(np.std(ff_values)),
-                "jitters": ff_jitters,
+                "mean": float(np.mean(ff_corrected)),
+                "std": float(np.std(ff_corrected)),
+                "raw_mean": float(np.mean(ff_raw)),
+                "raw_std": float(np.std(ff_raw)),
+                "per_run": ff_runs,
             },
             "mrc_c_core": {
-                "per_run": rnn_values,
-                "mean": float(np.mean(rnn_values)),
-                "std": float(np.std(rnn_values)),
-                "jitters": rnn_jitters,
+                "mean": float(np.mean(rnn_corrected)),
+                "std": float(np.std(rnn_corrected)),
+                "raw_mean": float(np.mean(rnn_raw)),
+                "raw_std": float(np.std(rnn_raw)),
+                "per_run": rnn_runs,
             },
         },
         "unit": "bits (shannon)",
@@ -87,5 +121,5 @@ def run(seeds: list[int] | None = None, seq_len: int = 700, env_dim: int = 5) ->
 
 if __name__ == "__main__":
     out = run()
-    print("Feedforward mean:", out["results"]["feedforward_baseline"]["mean"])
-    print("Recurrent mean:", out["results"]["mrc_c_core"]["mean"])
+    print("Feedforward corrected mean:", out["results"]["feedforward_baseline"]["mean"])
+    print("Recurrent corrected mean:", out["results"]["mrc_c_core"]["mean"])

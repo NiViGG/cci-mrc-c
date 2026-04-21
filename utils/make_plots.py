@@ -14,8 +14,8 @@ def run(results_dir: str = "results", assets_dir: str = "assets") -> None:
     with open(f"{results_dir}/training_dynamics.json", "r", encoding="utf-8") as f:
         training = json.load(f)
 
-    ff = compare["results"]["feedforward_baseline"]["per_run"]
-    rr = compare["results"]["mrc_c_core"]["per_run"]
+    ff = [r["bias_corrected"] for r in compare["results"]["feedforward_baseline"]["per_run"]]
+    rr = [r["bias_corrected"] for r in compare["results"]["mrc_c_core"]["per_run"]]
     cci_series = training["cci_series"]
 
     plot_cci_series(cci_series, f"{assets_dir}/cci_training.png")

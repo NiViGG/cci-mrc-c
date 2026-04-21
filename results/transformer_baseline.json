@@ -1,9 +1,14 @@
 {
   "experiment": "transformer_baseline",
   "seed": 42,
-  "result": {
-    "cci": 1.243638038635254,
-    "jitter": 1e-07
+  "method": {
+    "primary_value": "bias_corrected",
+    "correction": "raw_cmi - permutation_null_mean (floored at 0)",
+    "n_permutations": 20
   },
-  "unit": "bits (shannon)"
+  "raw": 1.2538785934448242,
+  "null_mean": 1.5259594440460205,
+  "bias_corrected": 0.0,
+  "used_jitter": 1e-06,
+  "interpretation_note": "A non-zero CCI value in attention models does not imply autonomy; interpret as conditional dependence magnitude under this benchmark."
 }

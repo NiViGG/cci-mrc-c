@@ -1,14 +1,23 @@
 {
-  "experiment": "noise_vs_structure",
-  "results": {
-    "noise_input": {
-      "cci": 31.46498680114746,
-      "jitter": 1e-07
-    },
-    "structured_input": {
-      "cci": 14.295650482177734,
-      "jitter": 1e-07
-    }
+  "experiment": "noise_vs_structured",
+  "seed": 42,
+  "method": {
+    "primary_value": "bias_corrected",
+    "correction": "raw_cmi - permutation_null_mean (floored at 0)",
+    "n_permutations": 20
   },
-  "unit": "bits (shannon)"
+  "noise_input": {
+    "raw": 31.46498680114746,
+    "null_mean": 2.1505539894104,
+    "bias_corrected": 29.31443281173706,
+    "used_jitter": 1e-07
+  },
+  "structured_input": {
+    "raw": 14.295650482177734,
+    "null_mean": 0.0,
+    "bias_corrected": 14.295650482177734,
+    "used_jitter": 1e-07
+  },
+  "unit": "bits (shannon)",
+  "interpretation_note": "White-noise forcing can excite broader latent variance and yield larger raw CCI; compare corrected values and trends, not raw magnitudes alone."
 }
