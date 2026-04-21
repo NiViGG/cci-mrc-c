@@ -5,3 +5,6 @@ scikit-learn
 imageio
 pyyaml
 pytest
+mne
+streamlit
+pandas
