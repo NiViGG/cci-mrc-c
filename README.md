@@ -101,6 +101,8 @@ The implementation uses covariance factorization with Cholesky stabilization.
   finite-sample settings.
 - Transformer non-zero CCI is conditional dependence evidence only and not proof
   of autonomy.
+- Methods note: `docs/methods.md`.
+- Claims contract: `docs/claims_contract.md`.
 
 ## Why Frontier Labs May Care
 
@@ -141,6 +143,7 @@ Documentation updates should preserve boundaries defined in `CLAIMS.md`.
 - No causal proof.
 - No consciousness detection claim.
 - `1.0 bit` is operational in this setup only, not universal.
+- See `docs/claims_contract.md` and `CLAIMS.md` for required qualifiers.
 
 ## Applications
 
