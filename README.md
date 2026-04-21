@@ -45,6 +45,7 @@ The concise vision synthesis from the external blueprint is documented in
 - `protocols/diffused_v1.md`
 - `protocols/trap_v1.md`
 - Attribution and source mapping: `protocols/ATTRIBUTION.md`
+- Validation note: `docs/datsyuk_protocols_validation.md`
 
 These protocols are interpretive references and do not replace metric evidence.
 

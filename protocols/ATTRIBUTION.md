@@ -16,3 +16,5 @@
 These materials are part of the interpretive layer and do not constitute
 empirical proof-claims. Metric evidence and claim boundaries are defined in
 `CLAIMS.md`.
+
+Validation note: `docs/datsyuk_protocols_validation.md`.
