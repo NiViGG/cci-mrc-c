@@ -198,6 +198,17 @@ python research/cci_validation.py
 
 This writes an exploratory JSON summary to `results/eeg_validation.json`.
 
+## EEG Test (Live)
+
+```bash
+streamlit run app.py
+python research/cci_validation.py
+```
+
+Output:
+
+- `results/eeg_validation.json`
+
 ## Scientific Scope Note
 
 This EEG extension is exploratory and provides a diagnostic dependence signal.
