@@ -3,3 +3,5 @@ __pycache__/
 .env
 .vscode/
 .idea/
+assets/_tmp_frames/
+results/eeg_validation.json
