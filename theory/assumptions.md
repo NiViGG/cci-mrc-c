@@ -1,0 +1,4 @@
+- Gaussian approximation
+- Sufficient sample size for covariance stability
+- Correct conditioning on relevant environment input E_t
+- CCI is a dependence metric, not a causal claim
