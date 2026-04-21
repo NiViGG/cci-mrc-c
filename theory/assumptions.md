@@ -2,3 +2,6 @@
 - Sufficient sample size for covariance stability
 - Correct conditioning on relevant environment input E_t
 - CCI is a dependence metric, not a causal claim
+- CCI values do not establish consciousness, intent, or agency on their own
+- Hidden variables and estimator misspecification can inflate apparent closure
+- Any `1.0 bit` threshold usage is operational in this setup only

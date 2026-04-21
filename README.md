@@ -66,3 +66,6 @@ conditioning quality, estimator assumptions, and hidden-variable risk in mind.
 
 See `CLAIMS.md` and `theory/assumptions.md` for boundaries, assumptions, and
 non-overclaim policy.
+
+Practical rule: treat CCI as a **diagnostic dependence signal** inside the
+modeled setup, not as causal proof and not as evidence of consciousness.
