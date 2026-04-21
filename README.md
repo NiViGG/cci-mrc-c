@@ -1,71 +1,116 @@
 # CCI-MRC-C
+## Computable Research Pipeline for Closed Causal Information in Neural Dynamical Systems
 
-Computable research pipeline for **Closed Causal Information (CCI)** in neural
-dynamical systems.
-
-Core metric:
+**Closed Causal Information (CCI)** is a diagnostic metric for internal temporal
+dependence in sequential systems.
 
 \[
-I(H_t ; H_{t+1}\mid E_t)
+I(H_t; H_{t+1}\mid E_t)
 \]
 
-This measures internal temporal dependence after conditioning on external input.
+It measures how much future internal state depends on current internal state
+after conditioning on external input.
 
-## Scientific framing (metric layer)
+> CCI measures dependence, not causation or consciousness.
 
-- We measure dependence, not will.
-- CCI is a diagnostic metric, not causal proof.
-- No consciousness claim is made from CCI alone.
-- `1.0 bit` is an **operational threshold in our setup**, not a universal law.
+## Overview
 
-## Vision framing (interpretive layer)
+We consider a system with internal state `H_t`, external input `E_t`, and
+stochastic noise `epsilon_t`:
 
-Interpretive hypotheses are allowed only as explicitly labeled interpretation
-and must remain downstream of measured results and assumptions.
+\[
+H_{t+1}=F(H_t,E_t,\epsilon_t)
+\]
 
-## Benchmarks included
+The core objective is to isolate the contribution of internal dynamics from
+input-driven effects.
 
-- Feedforward baseline vs recurrent MRC-C.
-- Noise vs structured input invariance check.
-- Transformer temporal-dependence baseline.
-- Training dynamics (`CCI`, `delta-CCI`, and jitter traces).
+\[
+E(X)=\sum_{t=1}^{T} I(H_t;H_{t+1}\mid E_t)
+\]
 
-## Quick start
+## Conceptual Diagram (Vision Layer)
+
+![CCI Concept Diagram](assets/cci_concept_diagram.png)
+
+_Conceptual interpretation only. Metric claims are defined in `CLAIMS.md`._
+
+The concise vision synthesis from the external blueprint is documented in
+`theory/master_blueprint.md` and explicitly tagged as Interpretive Layer (Vision).
+
+## Interactive CCI Calculator (Experimental)
+
+The repository includes an experimental CCI calculator workflow (Gaussian CMI):
+
+- Input tensors: `H_t`, `H_t1`, `E_t`
+- Covariance estimation with numerical stabilization
+- Cholesky-based log-det computation
+- Adaptive jitter policy for near-singular covariance
+- Outputs: CCI (bits), rolling CCI trend, optional delta-CCI, used jitter diagnostics
+
+### Expected input shapes
+
+- `H_t`: `[N, d_h]`
+- `H_t1`: `[N, d_h]`
+- `E_t`: `[N, d_e]`
+
+## Gaussian Estimation
+
+\[
+H(X)=\frac{1}{2}\log\left((2\pi e)^d|\Sigma_X|\right)
+\]
+
+\[
+I(X;Y\mid Z)=\frac{1}{2}\log\frac{|\Sigma_{XZ}||\Sigma_{YZ}|}{|\Sigma_Z||\Sigma_{XYZ}|}
+\]
+
+The implementation uses covariance factorization with Cholesky stabilization.
+
+## What CCI Captures
+
+- Internal temporal dependence
+- Hidden-state persistence
+- Regime shifts in latent dynamics (via CCI trend / delta-CCI)
+
+## What CCI Does Not Claim
+
+- Not a causal proof
+- Not a consciousness detector
+- Not a legal/personhood criterion
+
+## Applications
+
+### Current evidence-backed use cases
+
+- AI model diagnostics: reactive vs recurrent separation
+- Training regime shift monitoring
+- Hidden-state persistence tracking
+- Architecture comparison (FF/RNN/Transformer)
+- Anomaly/regime change signal in agent loops (exploratory)
+
+### Hypotheses / future validation
+
+- Medical, legal, and policy contexts are future validation hypotheses and not
+  current evidence-backed claims in this repository.
+- Consciousness-related interpretation remains speculative and cannot be inferred
+  from CCI alone.
+- See `docs/applications.md` for full evidence tiers and `CLAIMS.md` for scope.
+
+## Benchmarks in This Repository
+
+- Feedforward vs recurrent comparison
+- Training dynamics tracking
+- Input invariance test (noise vs structured)
+- Transformer baseline evaluation
+
+## Note on thresholds
+
+`1.0 bit` is an operational threshold in this setup. It is not a universal
+constant and must be interpreted with assumptions from `CLAIMS.md`.
+
+## Quick Start
 
 ```bash
 pip install -r requirements.txt
 python run_all.py
 ```
-
-## Generated outputs
-
-Results:
-- `results/cci_values.json`
-- `results/noise_vs_structure.json`
-- `results/transformer_baseline.json`
-- `results/training_dynamics.json`
-
-Visuals:
-- `assets/phase_space.png`
-- `assets/cci_training.png`
-- `assets/delta_cci.png`
-- `assets/cci_comparison.png`
-- `assets/attractor.gif`
-
-## Current benchmark snapshot
-
-From the latest seeded run:
-- Feedforward baseline mean CCI: ~3.26 bits
-- MRC-C mean CCI: ~24.97 bits
-- Transformer baseline CCI: ~1.24 bits
-
-These are setup-specific diagnostics and should be interpreted with
-conditioning quality, estimator assumptions, and hidden-variable risk in mind.
-
-## Scope and limitations
-
-See `CLAIMS.md` and `theory/assumptions.md` for boundaries, assumptions, and
-non-overclaim policy.
-
-Practical rule: treat CCI as a **diagnostic dependence signal** inside the
-modeled setup, not as causal proof and not as evidence of consciousness.
